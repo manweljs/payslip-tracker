@@ -2,11 +2,30 @@ from typing import TYPE_CHECKING, List, Optional
 from uuid import UUID, uuid4
 from datetime import datetime, timedelta
 
-from sqlmodel import Field, Relationship
+from sqlalchemy import table
+from sqlmodel import Field, Relationship, SQLModel
 from base.model import BaseModel
 
 if TYPE_CHECKING:
     from app.tracker.models import Income
+
+class ContactConfig(BaseModel, table=True):
+    __tablename__ = "ContactConfig"
+
+    id: Optional[UUID] = Field(
+        default_factory=uuid4,
+        primary_key=True,
+        sa_column_kwargs={"name": "ContactConfigID"}
+    )
+    contact_id: Optional[UUID] = Field(
+        foreign_key="Contact.ContactID",
+        sa_column_kwargs={"name": "ContactID"},
+        index=True
+    )
+
+    # Relationships
+    contact: Optional["Contact"] = Relationship(back_populates="config", sa_relationship_kwargs={"uselist": False})
+
 
 
 class Contact(BaseModel, table=True):
@@ -37,6 +56,8 @@ class Contact(BaseModel, table=True):
     # Relationships
     user: Optional["User"] = Relationship(back_populates="contact", sa_relationship_kwargs={"uselist": False})
     incomes: Optional[List["Income"]] = Relationship(back_populates="contact")
+    config: Optional["ContactConfig"] = Relationship(back_populates="contact", sa_relationship_kwargs={"uselist": False})
+
 
 
 class User(BaseModel, table=True):
