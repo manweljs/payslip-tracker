@@ -6,6 +6,9 @@ authors = [
     {name = "manweljs",email = "80235442+manweljs@users.noreply.github.com"}
 ]
 readme = "README.md"
+
+
+
 requires-python = ">=3.10,<4.0"
 dependencies = [
     "fastapi (>=0.115.12,<0.116.0)",
@@ -20,6 +23,13 @@ dependencies = [
     "aioodbc (>=0.5.0,<0.6.0)"
 ]
 
+[tool.poetry]
+packages = [
+  { include = "app",    from = "src" },
+  { include = "base",   from = "src" },
+  { include = "config", from = "src" },
+  { include = "utils",  from = "src" },
+]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
