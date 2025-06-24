@@ -10,5 +10,4 @@ class IncomeInput(BaseGraphQLInput):
     amount: Optional[float] = None
     description: Optional[str] = None
     income_date: Optional[datetime] = None
-    created_at: datetime = None
-    updated_at: Optional[datetime] = None
+    

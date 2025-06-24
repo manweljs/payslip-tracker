@@ -3,7 +3,6 @@
 import logging
 from typing import Optional
 import strawberry
-
 from app.tracker.schemas.input import IncomeInput
 from base.gql.register import register_mutation, register_query, register_subscription
 from base.gql.types import Info

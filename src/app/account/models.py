@@ -97,4 +97,4 @@ class User(BaseModel, table=True):
     )
 
 
-from app.tracker.models import Income
+
