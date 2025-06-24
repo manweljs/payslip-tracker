@@ -5,7 +5,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from config.db import get_db
 from datetime import datetime
 
-router = APIRouter(prefix="/api/Tracker", tags=["Tracker"])
 
 @router.get("/")
 async def read_root():
