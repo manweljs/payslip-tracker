@@ -2,13 +2,11 @@ from datetime import datetime
 from typing import List, Optional
 from uuid import UUID
 import strawberry
-from app.account.models import Contact
 from app.tracker.models import Income
 from app.tracker.schemas.output import IncomeSchema
 from base.gql.register import register_query
 from typing import List, Optional
 from app.tracker.models import Goal
-from app.tracker.schemas.base import BaseGoal
 from app.tracker.schemas.output import GoalOutput
 from base.gql.types import Info
 from sqlmodel.ext.asyncio.session import AsyncSession

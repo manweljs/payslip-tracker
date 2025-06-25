@@ -2,9 +2,12 @@ from fastapi import APIRouter, HTTPException, Depends
 from typing import List, Optional
 from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.tracker.models import Income
+from app.tracker.schemas.input import IncomeInput
+from app.tracker.schemas.output import ContactIncomeSchema, IncomeSchema
 from config.db import get_db
 from datetime import datetime
-
+router = APIRouter(prefix="/api/Tracker", tags=["Tracker"])
 
 @router.get("/")
 async def read_root():
@@ -38,45 +41,6 @@ async def get_goal(goal_id: UUID, db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Goal not found")
     return goal.model_dump()
     return {"message": "Updated successfully"}
-
-
-@router.post("/DeleteIncome")
-async def delete_income(
-    id: Optional[UUID],
-    db: AsyncSession = Depends(get_db),
-):
-    income = await Income.get_or_404(db, id=id)
-    await income.delete(db, commit=False)
-    await db.commit()
-    return {"message": "Deleted successfully"}
-
-
-@router.get("/GetIncomeByID")
-async def get_income_by_id(
-    id: UUID,
-    db: AsyncSession = Depends(get_db)
-):
-    income = await Income.get_or_404(db, id=id, relations=["contact"])
-    if not income:
-        raise ValueError("Contact not found")
-    return income
-
-
-@router.get("/GetAllIncomes", response_model=List[IncomeSchema])
-async def get_all_incomes(
-    db: AsyncSession = Depends(get_db)
-):
-    imcomes = await Income.search(db, relations=["contact"])
-    results = []
-    for imcome in imcomes:
-        result = IncomeSchema(
-            **imcome.model_dump(),
-            contact=ContactIncomeSchema(
-                **imcome.contact.model_dump()
-            )
-        )
-        results.append(result)
-    return results
 
 @router.get("/goals", response_model=List[dict])
 async def list_goals(db: AsyncSession = Depends(get_db)):
@@ -116,7 +80,39 @@ async def delete_goal(goal_id: UUID, db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Goal not found")
     await goal.delete(db)
     return {"message": "Goal deleted successfully"}
-router.post("/CreateIncome")
+
+
+# --- Income CRUD ---
+
+@router.get("/GetIncomeByID")
+async def get_income_by_id(
+    id: UUID,
+    db: AsyncSession = Depends(get_db)
+):
+    income = await Income.get_or_404(db, id=id, relations=["contact"])
+    if not income:
+        raise ValueError("Contact not found")
+    return income
+
+
+@router.get("/GetAllIncomes", response_model=List[IncomeSchema])
+async def get_all_incomes(
+    db: AsyncSession = Depends(get_db)
+):
+    imcomes = await Income.search(db, relations=["contact"])
+    results = []
+    for imcome in imcomes:
+        result = IncomeSchema(
+            **imcome.model_dump(),
+            contact=ContactIncomeSchema(
+                **imcome.contact.model_dump()
+            )
+        )
+        results.append(result)
+    return results
+
+
+@router.post("/CreateIncome")
 async def create_income(
     contact_id: UUID,
     amount: float,
@@ -130,7 +126,7 @@ async def create_income(
     return {"message": "Imcome created successfully", "income_id": str(income.id)}
 
 
-@router.post("/UpdateIncome")
+@router.put("/UpdateIncome")
 async def update_income(
     data: Optional[IncomeInput],
     db: AsyncSession = Depends(get_db),
@@ -145,7 +141,7 @@ async def update_income(
     return {"message": "Updated successfully"}
 
 
-@router.post("/DeleteIncome")
+@router.delete("/DeleteIncome")
 async def delete_income(
     id: Optional[UUID],
     db: AsyncSession = Depends(get_db),

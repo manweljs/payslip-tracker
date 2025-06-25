@@ -1,4 +1,3 @@
-
 from typing import List, Optional
 from uuid import UUID
 from fastapi import APIRouter, HTTPException
@@ -12,6 +11,7 @@ from .models import User, Contact
 from datetime import datetime
 from pydantic import BaseModel
 import pyrebase
+
 
 
 import os
@@ -47,10 +47,6 @@ pyrebase_auth = firebase.auth()
 router = APIRouter(prefix="/api/Account", tags=["Account"])
 
 # Pyrebase config for client-side authentication
-
-
-
-
 
 @router.post("/CreateUser")
 async def create_user(
