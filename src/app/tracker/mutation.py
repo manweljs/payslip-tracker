@@ -7,7 +7,6 @@ from uuid import UUID
 import strawberry
 from base.gql.register import register_mutation
 from app.tracker.schemas.input import IncomeInput,GoalInput
-from app.tracker.schemas.input import IncomeInput
 from app.tracker.schemas.output import IncomeSchema
 from base.gql.register import register_mutation, register_query, register_subscription
 from base.gql.types import Info
