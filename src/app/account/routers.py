@@ -55,8 +55,6 @@ async def get_contact(
     return contact.user
 
 
-
-
 @router.get("/GetAllContacts",
 response_model=List[ContactSchema],          
             )
