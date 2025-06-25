@@ -15,3 +15,13 @@ class BaseIncome(BaseDataModel):
     created_at: datetime = None
     updated_at: Optional[datetime] = None
 
+@dataclass
+class BaseGoal(BaseDataModel):
+    id: Optional[UUID] = None
+    contact_id: Optional[UUID] = None
+    target_amount: Optional[float] = None
+    description: Optional[str] = None
+    target_date: Optional[datetime] = None
+    created_at: datetime = None
+    updated_at: Optional[datetime] = None
+

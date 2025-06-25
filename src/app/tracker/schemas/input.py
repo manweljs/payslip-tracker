@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from typing import Optional
 from uuid import UUID
@@ -10,4 +9,11 @@ class IncomeInput(BaseGraphQLInput):
     amount: Optional[float] = None
     description: Optional[str] = None
     income_date: Optional[datetime] = None
+    
+
+class GoalInput(BaseGraphQLInput):
+    contact_id: Optional[UUID] = None
+    target_amount: Optional[float] = None
+    description: Optional[str] = None
+    target_date: Optional[datetime] = None
     

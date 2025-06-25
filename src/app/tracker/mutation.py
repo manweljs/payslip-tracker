@@ -1,30 +1,50 @@
 import logging
 from typing import Optional
 import strawberry
-from app.tracker.schemas.input import IncomeInput
-from base.gql.register import register_mutation, register_query, register_subscription
+from app.tracker.schemas.input import GoalInput
+from base.gql.register import register_mutation
 from base.gql.types import Info
-from .models import Income
+from .models import  Goal
 
 logger =logging.getLogger(__name__)
 
 @strawberry.type
-class IncomeMutation:
+class GoalMutation:
     @strawberry.mutation
-    async def create_income(self, info: Info, data: Optional[IncomeInput] = None)-> str:
+    async def create_goal(self, info: Info, data: Optional[GoalInput] = None) -> str:
         db = info.context.db
-        
-        income =  Income(
+        goal = Goal(
             contact_id=data.contact_id,
-            amount=data.amount,
+            target_amount=data.target_amount,
             description=data.description,
-            income_date=data.income_date,
+            target_date=data.target_date,
         )
-        await income.save(db)
-
+        await goal.save(db)
         return "Ok"
 
-    
-register_mutation(IncomeMutation)
+    @strawberry.mutation
+    async def update_goal(self, info: Info, id: str, data: GoalInput) -> str:
+        db = info.context.db
+        goal = await Goal.get_or_404(db, id=id)
+        if data.contact_id is not None:
+            goal.contact_id = data.contact_id
+        if data.target_amount is not None:
+            goal.target_amount = data.target_amount
+        if data.description is not None:
+            goal.description = data.description
+        if data.target_date is not None:
+            goal.target_date = data.target_date
+        await goal.save(db)
+        return "Ok"
+
+    @strawberry.mutation
+    async def delete_goal(self, info: Info, id: str) -> str:
+        db = info.context.db
+        goal = await Goal.get_or_404(db, id=id)
+        await goal.delete(db)
+        return "Ok"
+
+register_mutation(GoalMutation)
+
 
 
