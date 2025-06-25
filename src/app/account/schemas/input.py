@@ -15,3 +15,5 @@ class ContactNameInput(BaseGraphQLInput):
     id: Optional[UUID] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None
+    email: Optional[str] = None
+    password: Optional[str] = None

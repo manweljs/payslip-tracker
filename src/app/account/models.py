@@ -72,6 +72,11 @@ class User(BaseModel, table=True):
         sa_column_kwargs={"name": "ContactID"},
         index=True,
     )
+    firebase_uid: Optional[str] = Field(
+        max_length=255,
+        sa_column_kwargs={"name": "FirebaseUID"},
+    )
+
     username: Optional[str] = Field(
         max_length=255,
         sa_column_kwargs={"name": "Username"},
