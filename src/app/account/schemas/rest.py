@@ -13,3 +13,12 @@ class ContactSchema(BaseModel):
     last_name: str
     user: UserSchema
     
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+class LoginResponse(BaseModel):
+    idToken: str
+    refreshToken: str
+    expiresIn: str
+    email: str
